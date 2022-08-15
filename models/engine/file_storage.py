@@ -38,5 +38,5 @@ class FileStorage:
                 input = json.load(f)
                 for k, v in input.items():
                     FileStorage.__objects[k] = eval(v["__class__"])(**v)
-        except IOError:
+        except:
             pass
