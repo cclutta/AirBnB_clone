@@ -5,7 +5,11 @@ import json
 
 
 class FileStorage:
-    """That serializes instances to a JSON file and deserializes JSON. """
+    """That serializes instances to a JSON file and deserializes JSON.
+    Attributes:
+        __file_path: file path
+        __objects: object
+    """
     __file_path = "file.json"
     __objects = {}
 
@@ -14,12 +18,15 @@ class FileStorage:
         return FileStorage.__objects
 
     def new(self, obj):
-        """ sets in __objects the obj with key. """
+        """ sets in __objects the obj with key.
+        Args:
+            obj: object to set
+        """
         FileStorage.__objects["{}.{}".format(type(obj).__name__, obj.id)] = obj
 
     def save(self):
         """ serializes __objects to the JSON file. """
-         obj_dict = FileStorage.__objects.copy()
+        obj_dict = FileStorage.__objects.copy()
         output = {k: v.to_dict() for k, v in obj_dict.items()}
         with open(FileStorage.__file_path, "w") as f:
             json.dump(output, f, sort_keys=True, indent=4)
