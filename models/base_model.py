@@ -24,7 +24,7 @@ class BaseModel:
                 if k != "__class__":
                     setattr(self, k, v)
         else:
-            storage.new()
+            storage.new(self)
 
     def __str__(self):
         """ Prints [<class name>] (<self.id>) <self.__dict__>"""
