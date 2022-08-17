@@ -8,11 +8,13 @@ import shlex
 
 from models.base_model import BaseModel
 
+
 class HBNBCommand(cmd.Cmd):
     """ Console entry point. """
     prompt = "(hbnb) "
-    
-    classes = ["BaseModel", "Amenity", "City", "Place", "Review", "State", "User"]
+
+    classes = ["BaseModel", "Amenity",
+               "City", "Place", "Review", "State", "User"]
 
     def default(self, line):
         """ Default of cmd. """
