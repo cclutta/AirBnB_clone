@@ -143,6 +143,46 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
+    def count(self, line):
+        """
+        Prints the number of instances of a class. """
+        args = shlex.split(line)
+        models.storage.reload()
+        if len(args) < 1:
+            print("** class name missing **")
+        elif args[0] in self.classes:
+            instances = str(models.storage.all().keys())
+            print(instances.count(args[0]))
+        else:
+            print("** class doesn't exist **")
+
+    def default(self, line):
+        """Handles the default behaviour."""
+        funcs = {"all": self.do_all, "count": self.count, "show": self.do_show,
+                 "destroy": self.do_destroy, "update": self.do_update}
+        cmd = line.split('.', 1)
+        class_name = cmd[0]
+        args = [None]
+        if len(cmd) > 1:
+            args = cmd[1].strip("()").split('(')
+        if args[0] in funcs:
+            func = funcs[args[0]]
+            params = class_name + ' '
+            if len(args) > 1:
+                if args[0] == "update" and args[1][-1] == '}':
+                    str_dict = args[1].split(' ', 1)[1]
+                    upd_dict = ast.literal_eval(str_dict)
+                    params += args[1].split(',', 1)[0] + ' '
+                    for k, v in upd_dict.items():
+                        fparams = '{} "{}" "{}"'.format(params, str(k), str(v))
+                        func(fparams)
+                    return
+                else:
+                    params += args[1].replace(',', '')
+            func(params)
+        else:
+            print("*** Unknown syntax: {}".format(line))
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
